@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SpringMVC-Board
+Bundle-SymbolicName: SpringMVC-Board
+Bundle-Version: 1.0.0.qualifier
+Export-Package: com.board.jinsub,
+ com.board.jinsub.bean,
+ com.board.jinsub.dao,
+ com.board.jinsub.dao.mapper,
+ com.board.jinsub.service

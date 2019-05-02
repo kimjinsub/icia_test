@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.board.jinsub.dao.IBoardDao">
+	<select id="getBoardList" parameterType="Integer" resultType="board">
+	<!-- List형식을 쓰는것이 아님,, mybatis가 인터페이스 리턴타입처럼 List에 넣어줌 -->
+		<![CDATA[
+			SELECT * FROM 
+				(SELECT /*+INDEX_DESC(B PK_BOARD_B_NUM)*/
+				ROWNUM RN,B.* FROM B 
+				WHERE ROWNUM<=#{num}*5)
+			WHERE RN>=#{num}*5-4
+		]]>
+	</select>
+	<select id="getContents" parameterType="int" resultType="board">
+	<!-- Mybatis에 Integer의 Alias로 int가 등록되어있음 -->
+		SELECT * FROM BLIST_1 WHERE B_NUM=#{bnum}
+	</select>
+	<select id="getReplyList" parameterType="int" resultType="reply">
+		SELECT * FROM RLIST WHERE R_BNUM=#{bnum}
+	</select>
+	<insert id="replyInsert" parameterType="reply">
+		INSERT INTO R VALUES(REPLY_SEQ.NEXTVAL,#{r_bnum},#{r_contents},#{r_mid},DEFAULT)
+	</insert>
+	<delete id="replyDelete" parameterType="int">
+		DELETE FROM R WHERE R_BNUM=#{bnum}
+	</delete>
+	<delete id="articleDelete" parameterType="int">
+		DELETE FROM B WHERE B_NUM=#{bnum}
+	</delete>
+	<select id="getBoardCount" resultType="int">
+		SELECT MAX(RONUM) FROM BLIST_1
+		<!-- SELECT COUNT(*) FROM BLIST_1 --> 
+	</select>
+</mapper>

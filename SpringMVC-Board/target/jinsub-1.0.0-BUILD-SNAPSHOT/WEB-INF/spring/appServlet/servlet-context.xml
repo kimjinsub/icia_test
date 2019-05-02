@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- webapp/resources폴더 이용 -->
+	<!-- <resources mapping="/resources/**" location="/resources/" /> -->
+	<resources mapping="/images/**" location="/WEB-INF/views/images/" />
+	<resources mapping="/css/**" location="/WEB-INF/views/css/" />
+	<resources mapping="/js/**" location="/WEB-INF/views/js/" />
+	
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.board.jinsub" />
+	
+	<beans:bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<beans:property name="jndiName" value="myOracle"/>
+		<beans:property name="resourceRef" value="true"/>
+	</beans:bean>
+	
+	<!-- sqlSessionFactory :: mybatis가 사용 -->
+	<beans:bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource"/>
+		
+		<beans:property name="configLocation" 
+			value="classpath:com/board/jinsub/dao/mybatis-conf.xml"/>
+			
+		<beans:property name="mapperLocations"
+			value="classpath:com/**/mapper/*.xml"/>
+			
+		<!-- <beans:property name="mapperLocations"
+			value="classpath:com/board/jinsub/dao/mapper/board_mapper.xml, /* ,혹은 ; */
+				   classpath:com/board/jinsub/dao/mapper/member_mapper.xml"/> -->
+		<!-- <beans:property name="mapperLocations"
+			value="classpath:com/board/jinsub/dao/mapper/*.xml"/> --><!-- **:모든경로 -->
+			
+		<!-- WEB_INF에 설정시 설정1(권장x)
+		<beans:property name="configLocation" 
+			value="/WEB-INF/mybatis/mybatis-conf.xml"/>
+		<beans:property name="mapperLocations" 
+			value="/WEB-INF/mybatis/mapper/*.xml"/> -->
+		
+		<!-- 설정2(권장x)
+		<beans:property name="dataSource" ref="dataSource" /> 
+		<beans:property name="configLocation" value="/resources/mybatis/mybatis-config.xml" /> 
+		<beans:property name="mapperLocations" value="/resources/mybatis/mapper/*.xml"  />-->
+	</beans:bean>
+	
+	<!-- DAO using -->
+	<beans:bean id="mDao"
+		class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<beans:property name="sqlSessionFactory"
+			ref="sqlSessionFactory" />
+		<beans:property name="mapperInterface"
+			value="com.board.jinsub.dao.IMemberDao" />
+	</beans:bean>
+	
+	<beans:bean id="bDao"
+		class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<beans:property name="sqlSessionFactory"
+			ref="sqlSessionFactory" />
+		<beans:property name="mapperInterface"
+			value="com.board.jinsub.dao.IBoardDao" />
+	</beans:bean>
+	
+</beans:beans>

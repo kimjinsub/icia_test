@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 1.parameterType은 생략이 가능하다 -->
+<!-- 2.parameterType은 1개의 Type만 올 수 있다 -->
+<!-- 3.parameterType이 변수인 경우 #{변수명},단 변수 1개 인경우만 -->
+<!-- 4.parameterType이 bean인 경우 #{필드명} -->
+<!-- 5.parameterType이 Map(혹은 HashMap)인 경우 #{속성명(key)}으로 쓴다  -->
+<!-- 6.#{} : 문자열인 경우 ''(따옴표)추가됨 -->
+<!-- 7.${} : ''(따옴표)없이 그대로 입력됨 -->
+<!-- 8.resultType도 1개만 올 수 있는데 1개 이상의 레코드를 
+		검색하는 경우도 ArrayList대신 bean타입만 명시하면 된다. -->
+
+<mapper namespace="com.board.jinsub.dao.IMemberDao">
+	<!-- <select id="getMemberInfo" parameterType="Map" resultType="member">
+		SELECT * FROM M WHERE M_ID=#{id} AND M_PWD=#{pwd} 
+	</select> -->
+	<insert id="memberInsert" parameterType="member"> <!-- insert는 resultType을 설정 x -->
+		INSERT INTO M VALUES(#{m_id},#{m_pwd},#{m_name},#{m_birth},#{m_addr},#{m_phone},DEFAULT)
+	</insert>
+	<select id="getSecurityPwd" parameterType="String" resultType="String">
+		SELECT M_PWD FROM M WHERE M_ID=#{m_id}
+	</select>
+	<select id="getMemberInfo" parameterType="String" resultType="member">
+		SELECT * FROM MINFO WHERE M_ID=#{m_id}
+	</select>
+	<select id="mybatisTest" resultType="member">
+		<!-- SELECT * FROM MINFO WHERE ${cName}=${point}   //#{point}도 됨 -->
+		<!-- mybatis 동적sql참조... http://www.mybatis.org/mybatis-3/ko/index.html -->
+		SELECT * FROM MINFO
+		<if test="point!=null">
+			WHERE ${cName}=${point}
+		</if>
+	</select>
+</mapper>
