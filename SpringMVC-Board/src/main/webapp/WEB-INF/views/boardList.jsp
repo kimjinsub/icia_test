@@ -115,6 +115,11 @@ function logout(){
 		</tr>
 	</c:forEach>
 </table>
+
+<form action="writeFrm">
+	<button>글쓰기</button>
+</form>
+
 <div id="articleView_layer">
 	<div id="bg_layer"></div>
 	<div id="contents_layer"></div>

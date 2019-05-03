@@ -97,7 +97,7 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 	public ModelAndView boardDelete(Integer bnum) throws DBException{
 		mav=new ModelAndView();
 		boolean r=bDao.replyDelete(bnum);
-		boolean a=bDao.articleDelete(1000);//bnum //1000번글 삭제시 댓글 롤백확인
+		boolean a=bDao.articleDelete(bnum);//bnum //1000번글 삭제시 댓글 롤백확인
 		if(a==false) {
 			throw new DBException();
 			//try catch안하면 리턴을 요청자(이 경우는 현재service니까 controller로)에게 보내주니

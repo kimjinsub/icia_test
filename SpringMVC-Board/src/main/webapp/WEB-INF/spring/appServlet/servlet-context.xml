@@ -89,6 +89,14 @@
 	<!-- root는 스프링전반에 걸친 설정, servlet-context는 web프로젝트에 관한것 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
+	<!-- 파일 업로드 설정 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="defaultEncoding" value="UTF-8"/>
+		<beans:property name="maxUploadSize" value="10000000"/><!-- 10MB -->
+		<beans:property name="maxInMemorySize" value="10000000"/>
+	</beans:bean>
+	
 	<!-- Session Interceptor(가로채기) -->
 	<interceptors>
 		<interceptor>
