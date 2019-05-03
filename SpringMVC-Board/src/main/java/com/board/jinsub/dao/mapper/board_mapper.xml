@@ -33,4 +33,26 @@
 		SELECT MAX(RONUM) FROM BLIST_1
 		<!-- SELECT COUNT(*) FROM BLIST_1 --> 
 	</select>
+	<insert id="boardInsert" parameterType="board">
+		INSERT INTO B VALUES(BOARD_SEQ.NEXTVAL
+				,#{b_title},#{b_contents},#{b_mid},DEFAULT,DEFAULT)
+	</insert>
+	<select id="getBoardNum" parameterType="String" resultType="int">
+		SELECT MAX(B_NUM) FROM 
+			(SELECT /*+INDEX(B PK_BOARD_B_NUM)*/ 
+				* FROM B WHERE B_MID=#{id})
+	</select>
+	<insert id="fileInsert">
+		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{bf_oriFileName},#{bf_sysFileName},#{bnum})
+	</insert>
+	
+	<!-- <insert id="fileInsert">
+		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{bf_oriname},#{bf_sysname},#{bnum})
+	</insert> -->
+	<!-- <insert id="fileInsert" parameterMap="fMap">
+		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,?,?,?)
+	</insert> -->
+	<!-- <insert id="fileInsert" parameterType="Map<String,String>">
+		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,CONVERT(int,#{bnum}),#{oriFileName},#{sysFileName})
+	</insert> -->
 </mapper>

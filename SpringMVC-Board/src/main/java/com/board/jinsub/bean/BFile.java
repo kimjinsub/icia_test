@@ -2,11 +2,10 @@ package com.board.jinsub.bean;
 
 import org.apache.ibatis.type.Alias;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Alias("bfile")
-@Getter @Setter
+@Data
 public class BFile {
 	//글번호 필요하면 추가할것
 	private String bf_oriname;

@@ -10,6 +10,8 @@ import javax.xml.bind.DataBindingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.board.jinsub.bean.Board;
@@ -17,6 +19,7 @@ import com.board.jinsub.bean.Reply;
 import com.board.jinsub.dao.IBoardDao;
 import com.board.jinsub.userClass.DBException;
 import com.board.jinsub.userClass.Paging;
+import com.board.jinsub.userClass.UploadFile;
 import com.google.gson.Gson;
 
 @Service
@@ -25,6 +28,8 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 	private IBoardDao bDao;
 	@Autowired
 	private HttpSession session;
+	@Autowired
+	private UploadFile upload;
 	
 	ModelAndView mav;
 	
@@ -110,6 +115,41 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 		}
 		mav.setViewName("redirect:boardList");
 		//mav.setViewName("redirect:/boardList");
+		return mav;
+	}
+	
+	@Transactional
+	public ModelAndView boardWrite(MultipartHttpServletRequest multi) {
+		mav=new ModelAndView();
+		//1개의 file tag를 이용해서 여러파일을 선택했을 때
+		String view=null;
+		String title=multi.getParameter("b_title");
+		String contents=multi.getParameter("b_contents");
+		int check=Integer.valueOf(multi.getParameter("fileCheck"));
+		String id=session.getAttribute("id").toString();
+		Board board=new Board();
+		board.setB_title(title);
+		board.setB_contents(contents);
+		board.setB_mid(id);
+		boolean b=bDao.boardInsert(board);
+		System.out.println("b="+b);
+		board.setB_num(bDao.getBoardNum(id));//DB에서 글번호 가져옴
+		boolean f=false;
+		if(b && check==1) {
+			upload=new UploadFile();
+			System.out.println("board_b_num"+board.getB_num());
+			f=upload.fileUp(multi, board.getB_num());
+			//서버에 파일을 업로드한 후 -> 오리지널파일명,시스템파일명을 리턴 후에 맵에 저장
+			if(f) {
+				view="redirect:boardList";
+			}
+		}
+		if(b && check==0) {//글쓰기 성공
+			view="redirect:boardList";
+		}else {
+			view="writeFrm";
+		}
+		mav.setViewName(view);
 		return mav;
 	}
 }

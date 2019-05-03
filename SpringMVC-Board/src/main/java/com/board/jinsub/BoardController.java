@@ -1,11 +1,18 @@
 package com.board.jinsub;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.board.jinsub.bean.Board;
 import com.board.jinsub.service.BoardManagement;
 import com.board.jinsub.userClass.DBException;
 
@@ -33,4 +40,25 @@ public class BoardController {
 		mav=bm.boardDelete(bnum);
 		return mav;
 	}
+	
+	@RequestMapping(value = "/writeFrm", method = RequestMethod.GET)
+	public ModelAndView writeFrm() {
+		mav=new ModelAndView();
+		mav.setViewName("writeFrm");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/boardWrite", method = RequestMethod.POST)
+	public ModelAndView boardWrite(MultipartHttpServletRequest multi) {
+		mav=bm.boardWrite(multi);
+		return mav;
+	}
+	
+	/*@RequestMapping(value = "/boardWrite", method = RequestMethod.POST)
+	public ModelAndView boardWrite(Board board, List<MultipartFile> b_files) {
+		System.out.println("title="+board.getB_title());
+		System.out.println("file1="+b_files.get(0).getOriginalFilename());
+		System.out.println("file2="+b_files.get(1).getOriginalFilename());
+		return mav;
+	}*/
 }
