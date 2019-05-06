@@ -15,11 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.board.jinsub.bean.BFile;
+import com.board.jinsub.bean.Board;
+import com.board.jinsub.bean.Reply;
 import com.board.jinsub.dao.IBoardDao;
 @Component
 public class UploadFile {
@@ -27,6 +30,8 @@ public class UploadFile {
 	//String fullPath="D:/Work/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/SpringMVC-Board/resources/upload";
 	@Autowired
 	private IBoardDao bDao;
+	
+	
 	public boolean fileUp(MultipartHttpServletRequest multi, int bnum){
 		/*List<MultipartFile> files=multi.getFiles("b_files");
 		for(MultipartFile multif : files) {
@@ -40,7 +45,7 @@ public class UploadFile {
 		//2.폴더 생성을 꼭 할것...
 		File dir=new File(path);
 		if(!dir.isDirectory()){  //upload폴더 없다면
-			dir.mkdir();  //upload폴더 생성
+			dir.mkdirs();  //upload폴더 생성
 		}
 		//3.파일을 가져오기-파일태그 이름들 반환
 		Iterator<String> files=multi.getFileNames(); //파일업로드 2개이상일때
@@ -70,8 +75,14 @@ public class UploadFile {
 			BFile bf=new BFile();
 			bf.setBf_oriname(fMap.get("oriFileName"));
 			bf.setBf_sysname(fMap.get("sysFileName"));
-			//f=bDao.fileInsert(bf.getBf_oriname(),bf.getBf_sysname(),bnum);
-			f=bDao.fileInsert(bf.getBf_oriname(), bf.getBf_sysname(), bnum);
+			System.out.println(fMap.get("oriFileName"));
+			System.out.println(fMap.get("sysFileName"));
+			//f=bDao.fileInsert(fMap.get("oriFileName"), fMap.get("sysFileName"), bnum);
+			Reply r = new Reply();
+			r.setR_bnum(30);
+			r.setR_contents("하이");
+			r.setR_mid("aaa");
+			bDao.replyInsert(r);
 		} //while End
 		if(f)
 			return true;

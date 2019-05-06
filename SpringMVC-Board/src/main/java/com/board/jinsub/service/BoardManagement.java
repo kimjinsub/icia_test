@@ -20,6 +20,7 @@ import com.board.jinsub.dao.IBoardDao;
 import com.board.jinsub.userClass.DBException;
 import com.board.jinsub.userClass.Paging;
 import com.board.jinsub.userClass.UploadFile;
+import com.board.jinsub.userClass.UploadTest;
 import com.google.gson.Gson;
 
 @Service
@@ -119,7 +120,8 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 	}
 	
 	@Transactional
-	public ModelAndView boardWrite(MultipartHttpServletRequest multi) {
+	public ModelAndView boardWrite(MultipartHttpServletRequest multi) 
+			throws DBException{
 		mav=new ModelAndView();
 		//1개의 file tag를 이용해서 여러파일을 선택했을 때
 		String view=null;
@@ -135,17 +137,30 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 		System.out.println("b="+b);
 		board.setB_num(bDao.getBoardNum(id));//DB에서 글번호 가져옴
 		boolean f=false;
-		if(b && check==1) {
-			upload=new UploadFile();
-			System.out.println("board_b_num"+board.getB_num());
-			f=upload.fileUp(multi, board.getB_num());
-			//서버에 파일을 업로드한 후 -> 오리지널파일명,시스템파일명을 리턴 후에 맵에 저장
-			if(f) {
+		if(b) {
+			if(check==1) {
+				upload=new UploadFile();
+				System.out.println("board_b_num"+board.getB_num());
+				//f=upload.fileUp(multi, board.getB_num());
+				UploadTest upload2 = new UploadTest();
+				//f=upload2.fileupTest(multi, board.getB_num());
+				//서버에 파일을 업로드한 후 -> 오리지널파일명,시스템파일명을 리턴 후에 맵에 저장
+				String str=upload2.fileupTest(multi, board.getB_num());
+				String strArr[]=str.split(",");
+				String oriname=strArr[0];
+				String sysname=strArr[1];
+				System.out.println("hihi="+oriname+","+sysname);
+				f=bDao.fileInsert(oriname, sysname, board.getB_num());
+				if(f) {
+					view="redirect:boardList";
+				}else {
+					throw new DBException();
+				}
+			}else if(check==0) {//글쓰기 성공
 				view="redirect:boardList";
+			}else {
+				throw new DBException();
 			}
-		}
-		if(b && check==0) {//글쓰기 성공
-			view="redirect:boardList";
 		}else {
 			view="writeFrm";
 		}

@@ -43,16 +43,7 @@
 				* FROM B WHERE B_MID=#{id})
 	</select>
 	<insert id="fileInsert">
-		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{bf_oriFileName},#{bf_sysFileName},#{bnum})
+		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{oriname},#{sysname},#{bnum})
 	</insert>
 	
-	<!-- <insert id="fileInsert">
-		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{bf_oriname},#{bf_sysname},#{bnum})
-	</insert> -->
-	<!-- <insert id="fileInsert" parameterMap="fMap">
-		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,?,?,?)
-	</insert> -->
-	<!-- <insert id="fileInsert" parameterType="Map<String,String>">
-		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,CONVERT(int,#{bnum}),#{oriFileName},#{sysFileName})
-	</insert> -->
 </mapper>

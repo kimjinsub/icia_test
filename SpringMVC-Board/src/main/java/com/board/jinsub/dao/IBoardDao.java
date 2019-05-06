@@ -3,6 +3,8 @@ package com.board.jinsub.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.board.jinsub.bean.BFile;
 import com.board.jinsub.bean.Board;
 import com.board.jinsub.bean.Reply;
@@ -28,9 +30,6 @@ public interface IBoardDao {
 	int getBoardNum(String id);
 
 	//boolean fileInsert(BFile bf, int bnum);
-
-	boolean fileInsert(String oriFileName, String sysFileName, int bnum);
-
+	boolean fileInsert(@Param("oriname")String oriFileName, @Param("sysname")String sysFileName, @Param("bnum")int bnum);
 	//boolean fileInsert(Map<String, String> fMap);
-	
 }
