@@ -33,11 +33,6 @@ public class UploadFile {
 	
 	
 	public boolean fileUp(MultipartHttpServletRequest multi, int bnum){
-		/*List<MultipartFile> files=multi.getFiles("b_files");
-		for(MultipartFile multif : files) {
-			String f=multif.getOriginalFilename();
-			System.out.println("fileTagTest="+f);
-		}*/
 		//1.이클립스의 물리적 저장경로 찾기
 		String root=multi.getSession().getServletContext().getRealPath("/");
 		System.out.println("root="+root);
@@ -48,12 +43,35 @@ public class UploadFile {
 			dir.mkdirs();  //upload폴더 생성
 		}
 		//3.파일을 가져오기-파일태그 이름들 반환
-		Iterator<String> files=multi.getFileNames(); //파일업로드 2개이상일때
+		//Iterator<String> files=multi.getFileNames(); //#1파일업로드칸 2개이상일때
+		List<MultipartFile> files=multi.getFiles("b_files");//#2파일업로드 ctrl,shift로 동시에 2개이상 할때
 		
+		//#2
 		Map<String,String> fMap=new HashMap<String, String>();
 		fMap.put("bnum", String.valueOf(bnum));
 		boolean f=false;
-		while(files.hasNext()){
+		for(MultipartFile multiRep : files) {
+			String multiRepName=multiRep.getOriginalFilename();
+			String oriFileName=multiRepName;
+			fMap.put("oriFileName", oriFileName);
+			
+			//4.시스템파일이름 생성  a.txt  ==>112323242424.txt
+			String sysFileName=System.currentTimeMillis()+"."
+					+oriFileName.substring(oriFileName.lastIndexOf(".")+1);
+			fMap.put("sysFileName", sysFileName);
+			
+			//5.메모리->실제 파일 업로드
+			try {
+				multiRep.transferTo(new File(path+sysFileName));
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+			//f=bDao.fileInsert(fMap.get("oriFileName"), fMap.get("sysFileName"), bnum);
+			f=bDao.fileInsert(fMap);
+		}
+		
+		//#1
+		/*while(files.hasNext()){
 			String fileTagName=files.next();
 			System.out.println("fileTag="+fileTagName);  
 			//파일 메모리에 저장
@@ -72,18 +90,8 @@ public class UploadFile {
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
-			BFile bf=new BFile();
-			bf.setBf_oriname(fMap.get("oriFileName"));
-			bf.setBf_sysname(fMap.get("sysFileName"));
-			System.out.println(fMap.get("oriFileName"));
-			System.out.println(fMap.get("sysFileName"));
-			//f=bDao.fileInsert(fMap.get("oriFileName"), fMap.get("sysFileName"), bnum);
-			Reply r = new Reply();
-			r.setR_bnum(30);
-			r.setR_contents("하이");
-			r.setR_mid("aaa");
-			bDao.replyInsert(r);
-		} //while End
+			f=bDao.fileInsert(fMap.get("oriFileName"), fMap.get("sysFileName"), bnum);
+		} //while End */ 
 		if(f)
 			return true;
 		return false;
@@ -95,6 +103,9 @@ public class UploadFile {
 			
 			//한글파일 깨짐 방지
 			String downFile = URLEncoder.encode(oriFileName, "UTF-8");
+			downFile=downFile.replaceAll("\\+", "%20");
+			//공백을 +로 처리하는것 디버깅 %20:_(언더바,공백)
+			
 			//파일 객체 생성
 			File file = new File(fullPath);
 			//다운로드 경로 파일을 읽어 들임
@@ -116,8 +127,5 @@ public class UploadFile {
 			os.close();
 			is.close();
 		}
-	
-	
-	
 }
 

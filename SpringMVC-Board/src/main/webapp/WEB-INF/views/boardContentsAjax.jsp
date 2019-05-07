@@ -32,6 +32,7 @@
 		<td bgcolor="pink" align="center">CONTENTS</td>
 		<td colspan="5">${board.b_contents}</td>
 	</tr>
+	<!-- 첨부파일 사진을 출력하는것도 책보고 해보라 -->
 	<tr>
 		<th>첨부파일</th>
 		<td>
@@ -50,7 +51,10 @@
 </table>
 <form name="rFrm" id="rFrm">
 	<table>
+		<tr>
 			<td><textarea rows="3" cols="50" name="r_contents" id="r_contents"></textarea></td>
+			<!-- textarea에 <script>alert("hello")</script>같은거 못쓰게 구글링해서 네이버로 api설정해야함 -->
+		</tr>
 		<tr>
 			<!-- textarea는 /textarea로 닫아줘야한다 그냥 /로는 에러뜸 -->
 			<td>

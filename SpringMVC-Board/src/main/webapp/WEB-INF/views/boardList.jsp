@@ -69,19 +69,19 @@ function logout(){
 <table id="one_table">
 	<tr height="30">
 		<td width="80" bgcolor="pink" align="center">ID</td>
-		<td>${mb.m_id}</td>
+		<td>${mb.mid}</td>
 	</tr>
 	<tr height="30">
 		<td width="80" bgcolor="pink" align="center">NAME</td>
-		<td>${mb.m_name}</td>
+		<td>${mb.mname}</td>
 	</tr>
 	<tr height="30">
 		<td width="80" bgcolor="pink" align="center">GNAME</td>
-		<td>${mb.g_name}</td>
+		<td>${mb.gname}</td>
 	</tr>
 	<tr height="30">
 		<td width="80" bgcolor="pink" align="center">POINT</td>
-		<td>${mb.m_point}</td>
+		<td>${mb.mpoint}</td>
 	</tr>
 </table>
 <!-- <div align="right"> --><!-- 디자인공부:부트스트랩,모달박스 -->

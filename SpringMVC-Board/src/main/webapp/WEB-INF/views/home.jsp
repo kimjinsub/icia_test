@@ -25,11 +25,11 @@
 			<td colspan="2" align="center" bgcolor="skyblue">로그인</td>
 		</tr>
 		<tr>
-			<td><input type="text" name="m_id" placeholder="아이디"></td>
+			<td><input type="text" name="mid" placeholder="아이디"></td>
 			<td rowspan="2"><button>로그인</button></td>
 		</tr>
 		<tr>
-			<td><input type="password" name="m_pwd" placeholder="비밀번호"></td>
+			<td><input type="password" name="mpwd" placeholder="비밀번호"></td>
 		</tr>
 		<tr>
 			<td colspan="2" align="center" bgcolor="skyblue">com.board.jinsub</td>

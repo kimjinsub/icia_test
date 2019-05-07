@@ -13,17 +13,32 @@
 		검색하는 경우도 ArrayList대신 bean타입만 명시하면 된다. -->
 
 <mapper namespace="com.board.jinsub.dao.IMemberDao">
+	<!-- 빈 필드명과 sql컬럼명이 다르거나, 타입이 호환되지 않을 때 -->
+	<!-- <result property="b_contents" column="B_CONTENTS"
+			javaType="String" jdbcType="NCLOB"/> -->
+	<!-- jdbcType을 구글링이나 mabatis페이지에서 참고하여 써라 -->
+	<resultMap type="member" id="memberMap">
+		<result property="mid" column="M_ID"/>
+		<result property="mpwd" column="M_PWD"/>
+		<result property="mname" column="M_NAME"/>
+		<result property="mbirth" column="M_BIRTH"/>
+		<result property="maddr" column="M_ADDR"/>
+		<result property="mphone" column="M_PHONE"/>
+		<result property="mpoint" column="M_POINT"/>
+		<result property="gname" column="G_NAME"/>
+	</resultMap><!-- parameterMap도 비슷할듯하나 요즘은 비권장된다 deprecated -->
+
 	<!-- <select id="getMemberInfo" parameterType="Map" resultType="member">
 		SELECT * FROM M WHERE M_ID=#{id} AND M_PWD=#{pwd} 
 	</select> -->
 	<insert id="memberInsert" parameterType="member"> <!-- insert는 resultType을 설정 x -->
-		INSERT INTO M VALUES(#{m_id},#{m_pwd},#{m_name},#{m_birth},#{m_addr},#{m_phone},DEFAULT)
+		INSERT INTO M VALUES(#{mid},#{mpwd},#{mname},#{mbirth},#{maddr},#{mphone},DEFAULT)
 	</insert>
 	<select id="getSecurityPwd" parameterType="String" resultType="String">
-		SELECT M_PWD FROM M WHERE M_ID=#{m_id}
+		SELECT M_PWD FROM M WHERE M_ID=#{mid}
 	</select>
-	<select id="getMemberInfo" parameterType="String" resultType="member">
-		SELECT * FROM MINFO WHERE M_ID=#{m_id}
+	<select id="getMemberInfo" parameterType="String" resultMap="memberMap">
+		SELECT * FROM MINFO WHERE M_ID=#{mid}
 	</select>
 	<select id="mybatisTest" resultType="member">
 		<!-- SELECT * FROM MINFO WHERE ${cName}=${point}   //#{point}도 됨 -->

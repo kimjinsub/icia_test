@@ -1,7 +1,10 @@
 package com.board.jinsub.userClass;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -72,4 +75,32 @@ public class UploadTest {
 			return true;
 		return false;*/
 	}
+	//파일 다운로드
+		public void download(String fullPath, 
+				String oriFileName, HttpServletResponse resp) throws Exception {
+			
+			//한글파일 깨짐 방지
+			String downFile = URLEncoder.encode(oriFileName, "UTF-8");
+			//파일 객체 생성
+			File file = new File(fullPath);
+			//다운로드 경로 파일을 읽어 들임
+			InputStream is = new FileInputStream(file);
+			//반환객체설정
+			resp.setContentType("application/octet-stream");
+			resp.setHeader("content-Disposition", 
+					"attachment; filename=\""+downFile+"\"");
+			//반환객체에 스트림 연결
+			OutputStream os = resp.getOutputStream();
+			
+			//파일쓰기
+			byte[] buffer = new byte[1024];
+			int length;
+			while((length = is.read(buffer)) != -1){
+				os.write(buffer,0,length);
+			}
+			os.flush();
+			os.close();
+			is.close();
+			//bDao.fileInsert("hihiori", "hihisys", 73);
+		}
 }

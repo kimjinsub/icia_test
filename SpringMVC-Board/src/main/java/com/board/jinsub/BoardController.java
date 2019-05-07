@@ -70,14 +70,15 @@ public class BoardController {
 	@RequestMapping(value = "/download", method = RequestMethod.GET)/*?로 넘겨주니 get이다*/
 	/*public ModelAndView download(@RequestParam("oriFileName") String oriname,
 								 @RequestParam("sysFileName") String sysname) {*/
-	public ModelAndView download(@RequestParam Map<String,Object> params
-				,HttpServletResponse response
-				,HttpServletRequest request) {//여긴 RequestParam 생략안됨
+	public void download(@RequestParam Map<String,Object> params
+				,HttpServletRequest request
+				,HttpServletResponse response) throws Exception{
+		//Map으로 받을 땐 RequestParam 생략이 불가하다
+		//response보다 request를 먼저쓰자
 		System.out.println("ori="+params.get("oriFileName"));
 		System.out.println("sys="+params.get("sysFileName"));
 		params.put("root", request.getSession().getServletContext().getRealPath("/"));
 		params.put("response", response);
 		bm.download(params);
-		return mav;
 	}
 }

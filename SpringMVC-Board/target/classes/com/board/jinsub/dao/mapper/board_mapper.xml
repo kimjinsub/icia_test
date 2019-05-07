@@ -53,8 +53,8 @@
 	<!-- 오라클에서만 돌아감..MySQL에선 안돌아감 옵션을 줘야함 -->
 	<insert id="boardInsert" parameterType="board" 
 				useGeneratedKeys="true" keyProperty="b_num">
-				useGeneratedKeys="true":자동증가값을 얻을때
-				keyProperty="b_num(필드명)":MySQL은 필드명을 명시해야함
+				<!-- useGeneratedKeys="true":자동증가값을 얻을때
+				keyProperty="b_num(필드명)":MySQL은 필드명을 명시해야함 -->
 		<selectKey keyProperty="b_num" resultType="int" order="BEFORE">
 			SELECT BOARD_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
@@ -69,12 +69,15 @@
 				,#{b_title},#{b_contents},#{b_mid},DEFAULT,DEFAULT) 
 	</insert> -->
 	
-	<insert id="fileInsert">
-		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{oriname},#{sysname},#{bnum})
-	</insert>
-	<!-- <insert id="fileInsert" parameterType="hashMap">
+	<!-- <insert id="fileInsert">
 		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{oriname},#{sysname},#{bnum})
 	</insert> -->
+	<insert id="fileInsert" parameterType="Map">
+	<!-- Map이나 HashMap써도됨. Alias도 지원(map,hashmap)하니, 쓰면 편하나
+	검색해서 임의로 지정하는 Type이	지원하는 Alias와 같지 않도록 주의해야함 -->
+		INSERT INTO BF VALUES(BF_SEQ.NEXTVAL,#{oriFileName},#{sysFileName},#{bnum})
+	</insert>
+	
 	<select id="getBFList" parameterType="Integer" resultType="bfile">
 		SELECT * FROM BF WHERE BF_BNUM=#{bnum}
 	</select>

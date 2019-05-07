@@ -8,12 +8,13 @@ import lombok.Setter;
 @Alias("member")
 @Setter @Getter
 public class Member {
-	private String m_id;
-	private String m_pwd;
-	private String m_name;
-	private String m_birth;
-	private String m_addr;
-	private String m_phone;
-	private int m_point;
-	private String g_name;//등급이름
+	private String mid;
+	private String mpwd;
+	private String mname;
+	private String mbirth;
+	private String maddr;
+	private String mphone;
+	private int mpoint;
+	private String gname;//등급이름
+	
 }

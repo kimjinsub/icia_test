@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DataBindingException;
 
@@ -21,7 +22,6 @@ import com.board.jinsub.dao.IBoardDao;
 import com.board.jinsub.userClass.DBException;
 import com.board.jinsub.userClass.Paging;
 import com.board.jinsub.userClass.UploadFile;
-import com.board.jinsub.userClass.UploadTest;
 import com.google.gson.Gson;
 
 @Service
@@ -144,18 +144,10 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 		boolean f=false;
 		if(b) {
 			if(check==1) {
-				upload=new UploadFile();
+				//upload=new UploadFile();//프로토타입,,위에 autoWired했으니 쓰면안된다.bDao못가져옴.
 				System.out.println("board_b_num="+board.getB_num());
-				//f=upload.fileUp(multi, board.getB_num());
-				UploadTest upload2 = new UploadTest();
-				//f=upload2.fileupTest(multi, board.getB_num());
+				f=upload.fileUp(multi, board.getB_num());
 				//서버에 파일을 업로드한 후 -> 오리지널파일명,시스템파일명을 리턴 후에 맵에 저장
-				String str=upload2.fileupTest(multi, board.getB_num());
-				String strArr[]=str.split(",");
-				String oriname=strArr[0];
-				String sysname=strArr[1];
-				System.out.println("hihi="+oriname+","+sysname);
-				f=bDao.fileInsert(oriname, sysname, board.getB_num());
 				if(f) {
 					view="redirect:boardList";
 				}else {
@@ -172,4 +164,16 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 		mav.setViewName(view);
 		return mav;
 	}
+
+	public void download(Map<String, Object> params) throws Exception {
+		String root=(String)params.get("root");
+		String oriFileName=(String)params.get("oriFileName");
+		String sysFileName=(String)params.get("sysFileName");
+		String fullPath=root+"/resources/upload/"+sysFileName;
+		HttpServletResponse resp=(HttpServletResponse)params.get("response");
+		//실제 다운로드
+		//UploadTest file=new UploadTest();//프로토타입
+		upload.download(fullPath, oriFileName, resp);
+	}
+	
 }
