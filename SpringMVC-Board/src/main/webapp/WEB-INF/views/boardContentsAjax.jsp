@@ -32,12 +32,26 @@
 		<td bgcolor="pink" align="center">CONTENTS</td>
 		<td colspan="5">${board.b_contents}</td>
 	</tr>
+	<tr>
+		<th>첨부파일</th>
+		<td>
+			<c:set var="file" value="${bfList}"/>
+			<c:if test="${empty file}">
+				첨부된파일이 없어요
+			</c:if>
+			<c:if test="${!empty file}">
+				<c:forEach var="file" items="${bfList}">
+					<a href="download?oriFileName=${file.bf_oriname}
+						&sysFileName=${file.bf_sysname}">${file.bf_oriname}</a>
+				</c:forEach>
+			</c:if>
+		</td>
+	</tr>
 </table>
-
 <form name="rFrm" id="rFrm">
 	<table>
-		<tr>
 			<td><textarea rows="3" cols="50" name="r_contents" id="r_contents"></textarea></td>
+		<tr>
 			<!-- textarea는 /textarea로 닫아줘야한다 그냥 /로는 에러뜸 -->
 			<td>
 				<input type="button" value="댓글전송" onclick="replyInsert(${board.b_num})"

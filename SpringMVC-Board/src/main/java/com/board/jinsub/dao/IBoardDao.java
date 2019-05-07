@@ -32,4 +32,6 @@ public interface IBoardDao {
 	//boolean fileInsert(BFile bf, int bnum);
 	boolean fileInsert(@Param("oriname")String oriFileName, @Param("sysname")String sysFileName, @Param("bnum")int bnum);
 	//boolean fileInsert(Map<String, String> fMap);
+
+	List<BFile> getBFList(Integer bnum);
 }

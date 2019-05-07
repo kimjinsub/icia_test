@@ -1,13 +1,17 @@
 package com.board.jinsub;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,6 +55,7 @@ public class BoardController {
 	@RequestMapping(value = "/boardWrite", method = RequestMethod.POST)
 	public ModelAndView boardWrite(MultipartHttpServletRequest multi) {
 		mav=bm.boardWrite(multi);
+		//mav=bm.execute(1);
 		return mav;
 	}
 	
@@ -61,4 +66,18 @@ public class BoardController {
 		System.out.println("file2="+b_files.get(1).getOriginalFilename());
 		return mav;
 	}*/
+	
+	@RequestMapping(value = "/download", method = RequestMethod.GET)/*?로 넘겨주니 get이다*/
+	/*public ModelAndView download(@RequestParam("oriFileName") String oriname,
+								 @RequestParam("sysFileName") String sysname) {*/
+	public ModelAndView download(@RequestParam Map<String,Object> params
+				,HttpServletResponse response
+				,HttpServletRequest request) {//여긴 RequestParam 생략안됨
+		System.out.println("ori="+params.get("oriFileName"));
+		System.out.println("sys="+params.get("sysFileName"));
+		params.put("root", request.getSession().getServletContext().getRealPath("/"));
+		params.put("response", response);
+		bm.download(params);
+		return mav;
+	}
 }

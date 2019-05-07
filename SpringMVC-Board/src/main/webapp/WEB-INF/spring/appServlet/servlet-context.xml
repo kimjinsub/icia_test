@@ -47,8 +47,8 @@
 		<beans:property name="driverClassName"
 			value="net.sf.log4jdbc.DriverSpy"/>
 		<beans:property name="url"
-			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl"/>
-		<beans:property name="username" value="ICIA"/>
+			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe"/>
+		<beans:property name="username" value="ICIA3"/>
 		<beans:property name="password" value="1111"/>
 	</beans:bean>
 	

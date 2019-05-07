@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.board.jinsub.bean.BFile;
 import com.board.jinsub.bean.Board;
 import com.board.jinsub.bean.Reply;
 import com.board.jinsub.dao.IBoardDao;
@@ -65,6 +66,9 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 		String view=null;
 		Board board=bDao.getContents(bnum);
 		mav.addObject("board",board);
+		List<BFile> bfList=bDao.getBFList(bnum);
+		System.out.println("bfList's size="+bfList.size());
+		mav.addObject("bfList",bfList);
 		List<Reply> rList=bDao.getReplyList(bnum);
 		mav.addObject("rList",rList);
 		view="boardContentsAjax";
@@ -135,12 +139,13 @@ public class BoardManagement {//final 붙으면 상속불가. 최종클래스임
 		board.setB_mid(id);
 		boolean b=bDao.boardInsert(board);
 		System.out.println("b="+b);
-		board.setB_num(bDao.getBoardNum(id));//DB에서 글번호 가져옴
+		//board.setB_num(bDao.getBoardNum(id));//DB에서 글번호 가져옴
+		System.out.println("b_num="+board.getB_num());//selectkey 이용시 결과로인해 알아서 저장된다.
 		boolean f=false;
 		if(b) {
 			if(check==1) {
 				upload=new UploadFile();
-				System.out.println("board_b_num"+board.getB_num());
+				System.out.println("board_b_num="+board.getB_num());
 				//f=upload.fileUp(multi, board.getB_num());
 				UploadTest upload2 = new UploadTest();
 				//f=upload2.fileupTest(multi, board.getB_num());
