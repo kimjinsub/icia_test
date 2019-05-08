@@ -44,10 +44,34 @@ public class UploadFile {
 		}
 		//3.파일을 가져오기-파일태그 이름들 반환
 		//Iterator<String> files=multi.getFileNames(); //#1파일업로드칸 2개이상일때
-		List<MultipartFile> files=multi.getFiles("b_files");//#2파일업로드 ctrl,shift로 동시에 2개이상 할때
+		//List<MultipartFile> files=multi.getFiles("b_files");//#2파일업로드 ctrl,shift로 동시에 2개이상 할때
+		List<MultipartFile> files=multi.getFiles("files");//#3 FormData를 이용한 자료업로드(비동기)
+		
+		//#3
+		Map<String,String> fMap=new HashMap<String, String>();
+		fMap.put("bnum", String.valueOf(bnum));
+		boolean f=false;
+		for(int i=0;i<files.size();i++) {
+			String multiRepName=files.get(i).getOriginalFilename();
+			String oriFileName=multiRepName;
+			fMap.put("oriFileName", oriFileName);
+			
+			//4.시스템파일이름 생성  a.txt  ==>112323242424.txt
+			String sysFileName=System.currentTimeMillis()+"."
+					+oriFileName.substring(oriFileName.lastIndexOf(".")+1);
+			fMap.put("sysFileName", sysFileName);
+			
+			//5.메모리->실제 파일 업로드
+			try {
+				files.get(i).transferTo(new File(path+sysFileName));
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+			f=bDao.fileInsert(fMap);
+		}
 		
 		//#2
-		Map<String,String> fMap=new HashMap<String, String>();
+		/*Map<String,String> fMap=new HashMap<String, String>();
 		fMap.put("bnum", String.valueOf(bnum));
 		boolean f=false;
 		for(MultipartFile multiRep : files) {
@@ -68,7 +92,7 @@ public class UploadFile {
 			}
 			//f=bDao.fileInsert(fMap.get("oriFileName"), fMap.get("sysFileName"), bnum);
 			f=bDao.fileInsert(fMap);
-		}
+		}*/
 		
 		//#1
 		/*while(files.hasNext()){

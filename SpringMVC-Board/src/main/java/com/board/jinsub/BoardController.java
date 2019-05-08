@@ -66,7 +66,7 @@ public class BoardController {
 		System.out.println("file2="+b_files.get(1).getOriginalFilename());
 		return mav;
 	}*/
-	
+
 	@RequestMapping(value = "/download", method = RequestMethod.GET)/*?로 넘겨주니 get이다*/
 	/*public ModelAndView download(@RequestParam("oriFileName") String oriname,
 								 @RequestParam("sysFileName") String sysname) {*/
