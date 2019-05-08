@@ -87,7 +87,7 @@ function formData(){
 		//application/x-www-form-urlencoded(쿼리스트리형식) 처리금지,,데이터 안까게하기
 		
 		contentType:false,
-		//contentType:"applicateion/json" json 쓸때 이렇게 했던거 처럼 multipart의 경우 false로 해야됨
+		//contentType:"application/json" json 쓸때 이렇게 했던거 처럼 multipart의 경우 false로 해야됨
 		dataType:"html",//html은 생략가능
 		success:function(data){
 			alert("성공");

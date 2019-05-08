@@ -64,10 +64,10 @@ public class UploadFile {
 			//5.메모리->실제 파일 업로드
 			try {
 				files.get(i).transferTo(new File(path+sysFileName));
+				f=bDao.fileInsert(fMap);
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
-			f=bDao.fileInsert(fMap);
 		}
 		
 		//#2

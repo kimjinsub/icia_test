@@ -33,4 +33,5 @@ public interface IBoardDao {
 	boolean fileInsert(Map<String, String> fMap);
 
 	List<BFile> getBFList(Integer bnum);
+	
 }
